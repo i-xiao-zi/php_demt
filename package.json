@@ -1,0 +1,113 @@
+{
+  "name": "pde",
+  "displayName": "pde",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.103.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsWelcome": [
+      {
+        "view": "scm",
+        "contents": "In order to use git features, you can open a folder containing a git repository or clone from a URL.\n[Open Folder](command:vscode.openFolder)\n[Clone Repository](command:git.clone)\nTo learn more about how to use git and source control in VS Code [read our docs](https://aka.ms/vscode-scm).",
+        "when": "config.git.enabled && git.state == initialized && workbenchState == empty"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "pde",
+          "title": "PDE",
+          "icon": "images/lnmp.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "pde.helloWorld",
+        "title": "Hello World",
+        "icon": "$(history)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+				{
+					"command": "pde.helloWorld",
+					"when": "view == pde-header",
+					"group": "navigation@0"
+				},
+				{
+					"command": "pde.helloWorld",
+					"when": "view == pde-header",
+					"group": "inline@-2"
+				}
+      ],
+      "view/item/context": [
+        {
+          "command": "pde.helloWorld",
+          "when": "view == pde-header && viewItem == phpItem",
+          "group": "inline@-2"
+        }
+      ]
+    },
+    "views": {
+      "pde": [
+        {
+          "id": "pde-header",
+          "name": "php开发环境",
+          "type": "tree",
+          "icon": "images/lnmp.svg"
+        },
+        {
+          "id": "view-nginx-conig",
+          "name": "Nginx配置",
+          "type": "tree",
+          "icon": "images/lnmp.svg"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "yarn run check-types && yarn run lint && node esbuild.js",
+    "dev": "npm-run-all -p dev:esbuild dev:tsc",
+    "dev:webview": "node esbuild.js --watch --webview",
+    "dev:extension": "node esbuild.js --watch --extension",
+    "dev:esbuild": "node esbuild.js --watch",
+    "dev:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@types/vscode": "^1.103.0",
+    "@types/vscode-webview": "^1.57.5",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/webview-ui-toolkit": "^1.4.0",
+    "esbuild": "^0.25.9",
+    "eslint": "^9.34.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}
