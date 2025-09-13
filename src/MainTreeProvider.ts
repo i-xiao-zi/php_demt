@@ -1,14 +1,18 @@
 import * as vscode from 'vscode';
-import { Item } from './Item';
+import Item from './Item';
 import { Node } from './types';
 import datas from './data';
+import fs from 'fs';
 
 export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
+  private readonly _viewId: string = "view-main";
+  private readonly _context: vscode.ExtensionContext;
   private _onDidChangeTreeData = new vscode.EventEmitter<Item | undefined | null | void>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
   private data: Node[];
 
-  constructor() {
+  constructor(context: vscode.ExtensionContext) {
+    this._context = context;
     this.data = datas;
   }
 
@@ -25,7 +29,7 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
       const parentNode = this.findNodeById(element.id, this.data);
       if (parentNode && parentNode.children) {
         return Promise.resolve(
-          parentNode.children.map(child => new Item(child.label, child.collapsibleState, element, child.icon))
+          parentNode.children.map(child => new Item(child.id,child.label, child.collapsibleState, element, child.icon))
         );
       }
       return Promise.resolve([]);
@@ -34,26 +38,8 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
       }
   }
   rootNodes(): Item[] {
-    // 创建PHP开发环境条目
-    const phpItem = new Item("PHP开发环境", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file');
-    phpItem.contextValue = 'phpItem';
-    // 添加按钮
-    phpItem.buttons = [
-      {
-        iconPath: new vscode.ThemeIcon('settings'),
-        tooltip: '配置PHP开发环境'
-      }
-    ];
-    
     return [
-      phpItem,
-      new Item("MySQL数据库", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
-      new Item("Nginx服务器", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
-      new Item("Redis缓存", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
-      new Item("Memcached缓存", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
-      new Item("PHP扩展", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
-      new Item("PHP配置", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
-      new Item("PHP-FPM", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file'),
+      new Item("phpEnv","PHP开发环境", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file').setContextValue('phpItem'),
     ];
   }
 
@@ -71,5 +57,12 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
       }
     }
     return undefined;
+  }
+  public createView(): vscode.TreeView<Item> {
+      return vscode.window.createTreeView(this._viewId, {
+        treeDataProvider: this,
+      });
+  }
+  public registerCommands() {
   }
 }

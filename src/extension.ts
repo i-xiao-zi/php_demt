@@ -23,14 +23,26 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	});
-	// left view
-	const leftView = vscode.window.registerWebviewViewProvider('pde-view', new ViewProvider(context.extensionUri, ViewProvider.metas.LEFT));
-	const header = vscode.window.createTreeView('pde-header', {
-		treeDataProvider: new MainTreeProvider(),
+	const editFile = vscode.commands.registerCommand('pde.editFile', async (...args: string[]) => {
+		vscode.window.showInformationMessage('Hello World from pde.editFile!');
+		console.log({args});
+		const doc = await vscode.workspace.openTextDocument(args[0]);
+		const editor = await vscode.window.showTextDocument(doc, {
+			viewColumn: vscode.ViewColumn.Active,
+			preserveFocus: true,
+			preview: false,
+		});
 	});
-	const nginx_config = new NginxConfigProvider().create();
 
-	context.subscriptions.push(disposable, leftView, header, nginx_config);
+	const main_provider = new MainTreeProvider(context);
+	const main_view = main_provider.createView();
+	main_provider.registerCommands();
+	// nginx config view
+	const nginx_config_provider = new NginxConfigProvider(context);
+	const nginx_config_view = new NginxConfigProvider(context).createView();
+	const nginx_config_disposables = nginx_config_provider.registerCommands();
+
+	context.subscriptions.push(disposable, main_view, nginx_config_view, editFile, ...nginx_config_disposables);
 }
 
 export function deactivate() {}

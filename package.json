@@ -33,6 +33,21 @@
         "command": "pde.helloWorld",
         "title": "Hello World",
         "icon": "$(history)"
+      },
+      {
+        "command": "pde.editFile",
+        "title": "编辑文件",
+        "icon": "$(file)"
+      },
+      {
+        "command": "pde.newNginxConfigFile",
+        "title": "新建文件",
+        "icon": "$(add)"
+      },
+      {
+        "command": "pde.delNginxConfigFile",
+        "title": "删除文件",
+        "icon": "$(file)"
       }
     ],
     "menus": {
@@ -46,12 +61,27 @@
 					"command": "pde.helloWorld",
 					"when": "view == pde-header",
 					"group": "inline@-2"
+				},
+				{
+					"command": "pde.newNginxConfigFile",
+					"when": "view == view-nginx-conig",
+					"group": "navigation@2"
+				},
+				{
+					"command": "pde.newFile",
+					"when": "view == pde-header",
+					"group": "navigation@2"
 				}
       ],
       "view/item/context": [
         {
           "command": "pde.helloWorld",
           "when": "view == pde-header && viewItem == phpItem",
+          "group": "inline@-2"
+        },
+        {
+          "command": "pde.delNginxConfigFile",
+          "when": "view == view-nginx-conig",
           "group": "inline@-2"
         }
       ]

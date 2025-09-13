@@ -1,38 +1,35 @@
 import * as vscode from 'vscode';
 
-export class Item extends vscode.TreeItem {
-  public readonly id: string;
-  public buttons?: Array<{
-    iconPath: string | vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri } | vscode.ThemeIcon;
-    tooltip: string;
-    command?: string;
-  }>;
-
+class Item extends vscode.TreeItem {
   constructor(
+    public readonly id: string,
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly parent?: Item,
     iconName?: string
   ) {
     super(label, collapsibleState);
-    // 生成唯一ID
-    this.id = parent ? `${parent.id}-${label}` : label;
-    
-    // 设置图标
+    this.id = id;
     if (iconName) {
       this.iconPath = new vscode.ThemeIcon(iconName);
-    } else {
-      this.iconPath = new vscode.ThemeIcon(parent ? 'file' : 'folder');
     }
-
-    // 设置命令
-    this.command = {
-      command: 'lnmp.openItem',
-      title: 'Open Item',
-      arguments: [this.label, this.id]
-    };
-
-    // 上下文值（可用于右键菜单）
     this.contextValue = parent ? 'child' : 'parent';
   }
+
+  public setContextValue(contextValue: string): Item {
+    this.contextValue = contextValue;
+    return this;
+  }
+
+  public setDescription(description: string): Item {
+    this.description = description;
+    return this;
+  }
+
+  public setCommand(title: string, command: string, args?: any[], tooltip?: string): Item {
+    this.command = {title, command, arguments: args, tooltip};
+    return this;
+  }
 }
+
+export default Item;
