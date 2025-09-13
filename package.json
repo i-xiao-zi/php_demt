@@ -47,7 +47,7 @@
       {
         "command": "pde.delNginxConfigFile",
         "title": "删除文件",
-        "icon": "$(file)"
+        "icon": "$(trash)"
       }
     ],
     "menus": {
