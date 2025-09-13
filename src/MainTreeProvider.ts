@@ -38,9 +38,20 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
       }
   }
   rootNodes(): Item[] {
-    return [
-      new Item("phpEnv","PHP开发环境", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'file').setContextValue('phpItem'),
-    ];
+    const php = new Item("php","PHP", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+      .setContextValue('php')
+      .setCommand('切换PHP版本', 'pde.switchPhpVersion', [], '切换PHP版本');
+    const nginx = new Item("nginx","Nginx", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+      .setContextValue('nginx');
+    const mysql = new Item("mysql","MySQL", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+      .setContextValue('mysql');
+    const redis = new Item("redis","Redis", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+      .setContextValue('redis');
+    const kafka = new Item("kafka","Kafka", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+      .setContextValue('kafka');
+    const zookeeper = new Item("zookeeper","Zookeeper", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+      .setContextValue('zookeeper');
+    return [ php, nginx, mysql, redis, kafka, zookeeper ];
   }
 
   // 辅助方法：根据ID查找节点
@@ -64,6 +75,18 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
       });
   }
   public registerCommands(): vscode.Disposable[] {
-    return [];
+    const switchPhpVersion = vscode.commands.registerCommand('pde.switchPhpVersion', async () => {
+      const phpVersion = await vscode.window.showQuickPick([
+        {
+          label: '7.4',
+          description: 'PHP 7.4',
+        },
+        {
+          label: '8.0',
+          description: 'PHP 8.0',
+        },
+      ]);
+    });
+    return [ switchPhpVersion ];
   }
 }
