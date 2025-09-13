@@ -5,6 +5,7 @@ import datas from './data';
 import fs from 'fs';
 import path from 'path';
 import Document from './Document';
+import { mkdir } from './utils';
 
 export class NginxConfigProvider implements vscode.TreeDataProvider<Item> {
   private readonly _viewId: string = "view-nginx-conig";
@@ -17,6 +18,7 @@ export class NginxConfigProvider implements vscode.TreeDataProvider<Item> {
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
     this._dir = path.join(this._context.extensionPath, 'configs', 'nginx');
+    mkdir(this._dir);
     this.data = datas;
   }
 

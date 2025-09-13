@@ -63,6 +63,7 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
         treeDataProvider: this,
       });
   }
-  public registerCommands() {
+  public registerCommands(): vscode.Disposable[] {
+    return [];
   }
 }

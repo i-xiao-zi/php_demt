@@ -36,13 +36,18 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const main_provider = new MainTreeProvider(context);
 	const main_view = main_provider.createView();
-	main_provider.registerCommands();
+	const main_disposables = main_provider.registerCommands();
 	// nginx config view
 	const nginx_config_provider = new NginxConfigProvider(context);
 	const nginx_config_view = new NginxConfigProvider(context).createView();
 	const nginx_config_disposables = nginx_config_provider.registerCommands();
 
-	context.subscriptions.push(disposable, main_view, nginx_config_view, editFile, ...nginx_config_disposables);
+	context.subscriptions.push(
+		disposable, 
+		main_view, ...main_disposables, 
+		nginx_config_view, ...nginx_config_disposables,
+		editFile
+	);
 }
 
 export function deactivate() {}
