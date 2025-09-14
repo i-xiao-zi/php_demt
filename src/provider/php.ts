@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
-import Item from './Item';
-import { Node } from './types';
-import datas from './data';
+import Item from '../Item';
+import { Node } from '../types';
+import datas from '../data';
 import fs from 'fs';
 import path from 'path';
-import Document from './Document';
-import { mkdir } from './utils';
+import Document from '../Document';
+import { mkdir } from '../utils';
 
-export class NginxConfigProvider implements vscode.TreeDataProvider<Item> {
-  private readonly _viewId: string = "view-nginx-conig";
+class PhpProvider implements vscode.TreeDataProvider<Item> {
+  private readonly _viewId: string = "view:php";
   private readonly _context: vscode.ExtensionContext;
   private readonly _dir: string;
   private _onDidChangeTreeData = new vscode.EventEmitter<Item | undefined | null | void>();
@@ -17,7 +17,7 @@ export class NginxConfigProvider implements vscode.TreeDataProvider<Item> {
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
-    this._dir = path.join(this._context.extensionPath, 'configs', 'nginx');
+    this._dir = path.join(this._context.extensionPath, 'configs', 'php');
     mkdir(this._dir);
     this.data = datas;
   }
@@ -139,3 +139,5 @@ export class NginxConfigProvider implements vscode.TreeDataProvider<Item> {
     return [ newNginxConfigFile, delNginxConfigFile ];
   }
 }
+
+export default PhpProvider;

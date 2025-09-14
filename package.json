@@ -15,7 +15,7 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "pde",
+          "id": "default",
           "title": "PDE",
           "icon": "images/lnmp.svg"
         }
@@ -117,7 +117,7 @@
 				},
 				{
 					"command": "pde.newNginxConfigFile",
-					"when": "view == view-nginx-conig",
+					"when": "view == view:nginx",
 					"group": "navigation@2"
 				},
 				{
@@ -174,13 +174,13 @@
         },
         {
           "command": "pde.delNginxConfigFile",
-          "when": "view == view-nginx-conig",
+          "when": "view == view:nginx",
           "group": "inline@-2"
         }
       ]
     },
     "views": {
-      "pde": [
+      "default": [
         {
           "id": "view-main",
           "name": "php开发环境",
@@ -188,10 +188,22 @@
           "icon": "images/lnmp.svg"
         },
         {
-          "id": "view-nginx-conig",
+          "id": "view:nginx",
           "name": "Nginx配置",
           "type": "tree",
           "icon": "images/lnmp.svg"
+        },
+        {
+          "id": "view:php",
+          "name": "PHP配置",
+          "type": "tree",
+          "icon": "images/lnmp.svg"
+        },
+        {
+          "id": "view:extension",
+          "name": "$(folder) 扩展",
+          "type": "tree",
+          "icon": "$(folder)"
         }
       ]
     }
