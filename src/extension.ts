@@ -43,22 +43,22 @@ export function activate(context: vscode.ExtensionContext) {
 	const nginx_provider = new NginxProvider(context);
 	const nginx_view = new NginxProvider(context).createView();
 	const nginx_disposables = nginx_provider.registerCommands();
-
-	const extension_provider = new ExtensionProvider(context);
-	const extension_view = extension_provider.createView();
-	const extension_disposables = extension_provider.registerCommands();
 	// php config view
 	const php_provider = new PhpProvider(context);
 	const php_view = php_provider.createView();
 	const php_disposables = php_provider.registerCommands();
+	// extension view
+	const extension_provider = new ExtensionProvider(context);
+	const extension_view = extension_provider.createView();
+	const extension_disposables = extension_provider.registerCommands();
 
 	context.subscriptions.push(
 		disposable, 
 		editFile,
 		main_view, ...main_disposables, 
 		nginx_view, ...nginx_disposables,
-		extension_view, ...extension_disposables,
-		php_view, ...php_disposables
+		php_view, ...php_disposables,
+		extension_view, ...extension_disposables
 	);
 }
 

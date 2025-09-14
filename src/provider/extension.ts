@@ -30,35 +30,50 @@ class ExtensionProvider implements vscode.TreeDataProvider<Item> {
     return element;
   }
   getChildren(element?: Item): Thenable<Item[]> {
+    console.log({element});
     if (element) {
-      // 查找对应节点的子节点
-      const parentNode = this.findNodeById(element.id, this.data);
-      if (parentNode && parentNode.children) {
-        return Promise.resolve(
-          parentNode.children.map(child => new Item(child.id, child.label, child.collapsibleState, element, child.icon))
-        );
+      switch(element.id) {
+        case 'php':
+          return Promise.resolve(this.phpNodes());
+        case 'nginx':
+          return Promise.resolve(this.nginxNodes());
+        default: 
+          return Promise.resolve([]);
       }
-      return Promise.resolve([]);
     } else {
       return Promise.resolve(this.rootNodes());
     }
   }
   private rootNodes(): Item[] {
-    const files = fs.readdirSync(this._dir);
     const items: Item[] = [];
-    files.map(file => {
-      if (file.endsWith(".conf")) {
-        const stat = fs.statSync(path.join(this._dir, file));
-        if (stat.isFile()) {
-          items.push(
-            new Item(file, file, vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
-            .setContextValue('nginxConfigItem')
-            .setDescription(file)
-            .setCommand('Open Item', 'pde.editFile', [path.join(this._dir, file)], 'Open Item')
-          );
-        }
-      }
-    });
+    items.push(new Item("php", "php", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'code-oss')
+      .setContextValue('php')
+      .setDescription("php")
+    );
+    items.push(new Item("nginx", "nginx", vscode.TreeItemCollapsibleState.Collapsed, undefined, 'code-oss')
+      .setContextValue('nginx')
+      .setDescription("nginx")
+    );
+    return items;
+  }
+  private phpNodes(): Item[] {
+    const items: Item[] = [];
+    items.push(new Item("php/7.1", "php/7.1", vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
+      .setContextValue('phpItem')
+      .setDescription("php 7.1")
+    );
+    items.push(new Item("php/5.6", "php/5.6", vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
+      .setContextValue('phpItem')
+      .setDescription("php 5.6")
+    );
+    return items;
+  }
+  private nginxNodes(): Item[] {
+    const items: Item[] = [];
+    items.push(new Item("nginx/1.14", "nginx/1.14", vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
+      .setContextValue('nginxItem')
+      .setDescription("nginx 1.14")
+    );
     return items;
   }
 
@@ -83,60 +98,18 @@ class ExtensionProvider implements vscode.TreeDataProvider<Item> {
       });
   }
   public registerCommands(): vscode.Disposable[] {
-    const newNginxConfigFile = vscode.commands.registerCommand('pde.newNginxConfigFile', async () => {
-        const name = await vscode.window.showInputBox({
-          prompt: '请输入文件名',
-          placeHolder: '请输入文件名',
-          validateInput: (value: string) => {
-            if (/[<>:"/\\|?*]/.test(value)) {
-                return '文件名不能包含特殊字符: < > : " / \\ | ? *';
-            }
-            if (value.endsWith('.conf')) {
-              const stat = fs.existsSync(path.join(this._dir, value));
-              return stat ? '文件已存在' : null;
-            }
-            return '请输入.conf文件';
-          },
-        });
-        console.log({name});
-        if (name) {
-          fs.writeFileSync(path.join(this._dir, name), `
-          server {
-              default_type 'text/html';
-              charset utf-8;
-              listen 8070; # 监听的端口号
-              autoindex off; 
-              server_name localhost;  #监听的域名
-              # 存放nginx日志的路径
-              access_log /usr/src/nginx/logs/welink.log combined;
-              index index.html index.htm index.jsp index.php;
-              #error_page 404 /404.html
-              if ( $query_string ~* ".*[\;'\<\>].*" ) {
-                  return 404;
-              }
-              location / {
-                  index index.html; # 请求入口文件
-                  root  /data/welink/dist/; # 请求的目录
-              }
-          }
-          `);
-          const doc = new Document(path.join(this._dir, name));
-          await doc.open();
-          await doc.show();
+    const reload = vscode.commands.registerCommand(`view:extension/reload`, async (item: Item) => {
+      console.log({item});
+      if (item) {
+        const confirmation = await vscode.window.showWarningMessage(
+            `确定要删除 "${item.label}" 吗?`,
+            { modal: true },
+            'ok'
+        );
+        console.log({confirmation});
         }
       });
-      const delNginxConfigFile = vscode.commands.registerCommand('pde.delNginxConfigFile', async (item: Item) => {
-        console.log({item});
-        if (item) {
-          const confirmation = await vscode.window.showWarningMessage(
-              `确定要删除 "${item.label}" 吗?`,
-              { modal: true },
-              'ok'
-          );
-          console.log({confirmation});
-        }
-      });
-    return [ newNginxConfigFile, delNginxConfigFile ];
+    return [ reload ];
   }
 }
 

@@ -4,7 +4,6 @@ import { Node } from '../types';
 import datas from '../data';
 import fs from 'fs';
 import path from 'path';
-import Document from '../Document';
 import { mkdir } from '../utils';
 
 class PhpProvider implements vscode.TreeDataProvider<Item> {
@@ -17,7 +16,7 @@ class PhpProvider implements vscode.TreeDataProvider<Item> {
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
-    this._dir = path.join(this._context.extensionPath, 'configs', 'php');
+    this._dir = path.join(this._context.extensionPath, 'extensions', 'php');
     mkdir(this._dir);
     this.data = datas;
   }
@@ -44,22 +43,22 @@ class PhpProvider implements vscode.TreeDataProvider<Item> {
     }
   }
   rootNodes(): Item[] {
-    const files = fs.readdirSync(this._dir);
-    const items: Item[] = [];
-    files.map(file => {
-      if (file.endsWith(".conf")) {
-        const stat = fs.statSync(path.join(this._dir, file));
-        if (stat.isFile()) {
-          items.push(
-            new Item(file, file, vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
-            .setContextValue('nginxConfigItem')
-            .setDescription(file)
-            .setCommand('Open Item', 'pde.editFile', [path.join(this._dir, file)], 'Open Item')
-          );
-        }
-      }
-    });
-    return items;
+    let items: Item[] = [];
+    items.push(
+      new Item("php/7.1", "php/7.1", vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
+      .setContextValue('phpItem')
+      .setDescription("php 7.1")
+    );
+    items.push(
+      new Item("php/5.6", "php/5.6", vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
+      .setContextValue('phpItem')
+      .setDescription("php 5.6")
+    );
+    return [
+      new Item("php/5.6", "php/5.6", vscode.TreeItemCollapsibleState.None, undefined, 'code-oss')
+      .setContextValue('phpItem')
+      .setDescription("php 5.6")
+    ];
   }
 
   // 辅助方法：根据ID查找节点
@@ -83,60 +82,17 @@ class PhpProvider implements vscode.TreeDataProvider<Item> {
       });
   }
   public registerCommands(): vscode.Disposable[] {
-    const newNginxConfigFile = vscode.commands.registerCommand('pde.newNginxConfigFile', async () => {
-        const name = await vscode.window.showInputBox({
-          prompt: '请输入文件名',
-          placeHolder: '请输入文件名',
-          validateInput: (value: string) => {
-            if (/[<>:"/\\|?*]/.test(value)) {
-                return '文件名不能包含特殊字符: < > : " / \\ | ? *';
-            }
-            if (value.endsWith('.conf')) {
-              const stat = fs.existsSync(path.join(this._dir, value));
-              return stat ? '文件已存在' : null;
-            }
-            return '请输入.conf文件';
-          },
-        });
-        console.log({name});
-        if (name) {
-          fs.writeFileSync(path.join(this._dir, name), `
-          server {
-              default_type 'text/html';
-              charset utf-8;
-              listen 8070; # 监听的端口号
-              autoindex off; 
-              server_name localhost;  #监听的域名
-              # 存放nginx日志的路径
-              access_log /usr/src/nginx/logs/welink.log combined;
-              index index.html index.htm index.jsp index.php;
-              #error_page 404 /404.html
-              if ( $query_string ~* ".*[\;'\<\>].*" ) {
-                  return 404;
-              }
-              location / {
-                  index index.html; # 请求入口文件
-                  root  /data/welink/dist/; # 请求的目录
-              }
-          }
-          `);
-          const doc = new Document(path.join(this._dir, name));
-          await doc.open();
-          await doc.show();
-        }
-      });
-      const delNginxConfigFile = vscode.commands.registerCommand('pde.delNginxConfigFile', async (item: Item) => {
-        console.log({item});
-        if (item) {
-          const confirmation = await vscode.window.showWarningMessage(
-              `确定要删除 "${item.label}" 吗?`,
-              { modal: true },
-              'ok'
-          );
-          console.log({confirmation});
-        }
-      });
-    return [ newNginxConfigFile, delNginxConfigFile ];
+    const install = vscode.commands.registerCommand(`${this._viewId}/install`, async (item: Item) => {
+      if (item) {
+        const confirmation = await vscode.window.showWarningMessage(
+            `确定要安装 "${item.label}" 吗?`,
+            { modal: true },
+            'ok'
+        );
+        console.log({confirmation});
+      }
+    });
+    return [ install ];
   }
 }
 

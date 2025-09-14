@@ -91,6 +91,16 @@
         "command": "pde.delNginxConfigFile",
         "title": "删除文件",
         "icon": "$(trash)"
+      },
+      {
+        "command": "view:extension/reload",
+        "title": "安装",
+        "icon": "$(install)"
+      },
+      {
+        "command": "view:php/install",
+        "title": "安装",
+        "icon": "$(install)"
       }
     ],
     "menus": {
@@ -121,8 +131,8 @@
 					"group": "navigation@2"
 				},
 				{
-					"command": "pde.newFile",
-					"when": "view == pde-header",
+					"command": "view:extension/reload",
+					"when": "view == view:extension",
 					"group": "navigation@2"
 				}
       ],
@@ -176,6 +186,11 @@
           "command": "pde.delNginxConfigFile",
           "when": "view == view:nginx",
           "group": "inline@-2"
+        },
+        {
+          "command": "view:php/install",
+          "when": "view == view:php && viewItem == phpItem",
+          "group": "inline@-2"
         }
       ]
     },
@@ -201,7 +216,7 @@
         },
         {
           "id": "view:extension",
-          "name": "$(folder) 扩展",
+          "name": "扩展",
           "type": "tree",
           "icon": "$(folder)"
         }
