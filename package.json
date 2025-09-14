@@ -16,7 +16,7 @@
       "activitybar": [
         {
           "id": "default",
-          "title": "PDE",
+          "title": "PHP Development Environment Management Tool",
           "icon": "images/lnmp.svg"
         }
       ]
@@ -102,17 +102,17 @@
 				},
 				{
 					"command": "pde.startMainTreeProvider",
-					"when": "view == view-main",
+					"when": "view == view:main",
 					"group": "navigation@2"
 				},
 				{
 					"command": "pde.stopMainTreeProvider",
-					"when": "view == view-main",
+					"when": "view == view:main",
 					"group": "navigation@2"
 				},
 				{
 					"command": "pde.restartMainTreeProvider",
-					"when": "view == view-main",
+					"when": "view == view:main",
 					"group": "navigation@2"
 				},
 				{
@@ -134,42 +134,42 @@
         },
         {
           "command": "pde.switchPhpVersion",
-          "when": "view == view-main && viewItem == php",
+          "when": "view == view:main && viewItem == php",
           "group": "inline@-2"
         },
         {
           "command": "pde.switchPhpVersion",
-          "when": "view == view-main && viewItem == php",
+          "when": "view == view:main && viewItem == php",
           "group": "inline@-2"
         },
         {
           "command": "pde.startNginx",
-          "when": "view == view-main && viewItem == nginx",
+          "when": "view == view:main && viewItem == nginx",
           "group": "inline@1"
         },
         {
           "command": "pde.restartNginx",
-          "when": "view == view-main && viewItem == nginx",
+          "when": "view == view:main && viewItem == nginx",
           "group": "inline@2"
         },
         {
           "command": "pde.stopNginx",
-          "when": "view == view-main && viewItem == nginx",
+          "when": "view == view:main && viewItem == nginx",
           "group": "inline@3"
         },
         {
           "command": "pde.startMysql",
-          "when": "view == view-main && viewItem == mysql",
+          "when": "view == view:main && viewItem == mysql",
           "group": "inline@1"
         },
         {
           "command": "pde.restartMysql",
-          "when": "view == view-main && viewItem == mysql",
+          "when": "view == view:main && viewItem == mysql",
           "group": "inline@2"
         },
         {
           "command": "pde.stopMysql",
-          "when": "view == view-main && viewItem == mysql",
+          "when": "view == view:main && viewItem == mysql",
           "group": "inline@3"
         },
         {
@@ -182,7 +182,7 @@
     "views": {
       "default": [
         {
-          "id": "view-main",
+          "id": "view:main",
           "name": "php开发环境",
           "type": "tree",
           "icon": "images/lnmp.svg"

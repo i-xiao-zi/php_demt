@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import Panel from './Panel';
 import { ViewProvider } from './ViewProvider';
-import { MainTreeProvider } from './MainTreeProvider';
+import MainProvider from './provider/main';
 import NginxProvider from './provider/nginx';
-import ExtensionProvider from './provider/extension';
 import PhpProvider from './provider/php';
+import ExtensionProvider from './provider/extension';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "pde" is now active!');
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	const main_provider = new MainTreeProvider(context);
+	const main_provider = new MainProvider(context);
 	const main_view = main_provider.createView();
 	const main_disposables = main_provider.registerCommands();
 	// nginx config view
@@ -54,9 +54,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		disposable, 
+		editFile,
 		main_view, ...main_disposables, 
 		nginx_view, ...nginx_disposables,
-		editFile,
 		extension_view, ...extension_disposables,
 		php_view, ...php_disposables
 	);

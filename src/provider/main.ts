@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import Item from './Item';
-import { Node } from './types';
-import datas from './data';
+import Item from '../Item';
+import { Node } from '../types';
+import datas from '../data';
 import fs from 'fs';
 
-export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
-  private readonly _viewId: string = "view-main";
+class MainProvider implements vscode.TreeDataProvider<Item> {
+  private readonly _viewId: string = "view:main";
   private readonly _context: vscode.ExtensionContext;
   private _onDidChangeTreeData = new vscode.EventEmitter<Item | undefined | null | void>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -90,3 +90,5 @@ export class MainTreeProvider implements vscode.TreeDataProvider<Item> {
     return [ switchPhpVersion ];
   }
 }
+
+export default MainProvider;

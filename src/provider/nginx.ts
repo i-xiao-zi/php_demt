@@ -124,18 +124,18 @@ class NginxProvider implements vscode.TreeDataProvider<Item> {
           await doc.open();
           await doc.show();
         }
-      });
-      const delNginxConfigFile = vscode.commands.registerCommand('pde.delNginxConfigFile', async (item: Item) => {
-        console.log({item});
-        if (item) {
-          const confirmation = await vscode.window.showWarningMessage(
-              `确定要删除 "${item.label}" 吗?`,
-              { modal: true },
-              'ok'
-          );
-          console.log({confirmation});
-        }
-      });
+    });
+    const delNginxConfigFile = vscode.commands.registerCommand('pde.delNginxConfigFile', async (item: Item) => {
+      console.log({item});
+      if (item) {
+        const confirmation = await vscode.window.showWarningMessage(
+            `确定要删除 "${item.label}" 吗?`,
+            { modal: true },
+            'ok'
+        );
+        console.log({confirmation});
+      }
+    });
     return [ newNginxConfigFile, delNginxConfigFile ];
   }
 }
