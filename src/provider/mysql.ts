@@ -6,8 +6,8 @@ import fs from 'fs';
 import path from 'path';
 import { mkdir } from '../utils';
 
-class PhpProvider implements vscode.TreeDataProvider<Item> {
-  private readonly _viewId: string = "view:php";
+class MysqlProvider implements vscode.TreeDataProvider<Item> {
+  private readonly _viewId: string = "view:mysql";
   private readonly _context: vscode.ExtensionContext;
   private readonly _dir: string;
   private _onDidChangeTreeData = new vscode.EventEmitter<Item | undefined | null | void>();
@@ -16,7 +16,7 @@ class PhpProvider implements vscode.TreeDataProvider<Item> {
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
-    this._dir = path.join(this._context.extensionPath, 'extensions', 'php');
+    this._dir = path.join(this._context.extensionPath, 'extensions', 'mysql');
     mkdir(this._dir);
     this.data = datas;
   }
@@ -86,4 +86,4 @@ class PhpProvider implements vscode.TreeDataProvider<Item> {
   }
 }
 
-export default PhpProvider;
+export default MysqlProvider;

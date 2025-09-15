@@ -5,7 +5,7 @@ import datas from '../data';
 import fs from 'fs';
 import path from 'path';
 import Document from '../Document';
-import { mkdir } from '../utils';
+import { download, http, mkdir } from '../utils';
 
 class ExtensionProvider implements vscode.TreeDataProvider<Item> {
   private readonly _viewId: string = "view:extension";
@@ -17,7 +17,7 @@ class ExtensionProvider implements vscode.TreeDataProvider<Item> {
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this._context = context;
-    this._dir = path.join(this._context.extensionPath, 'configs', 'php');
+    this._dir = path.join(this._context.extensionPath, 'extensions');
     mkdir(this._dir);
     this.data = datas;
   }
@@ -98,18 +98,22 @@ class ExtensionProvider implements vscode.TreeDataProvider<Item> {
       });
   }
   public registerCommands(): vscode.Disposable[] {
-    const reload = vscode.commands.registerCommand(`view:extension/reload`, async (item: Item) => {
-      console.log({item});
-      if (item) {
-        const confirmation = await vscode.window.showWarningMessage(
-            `确定要删除 "${item.label}" 吗?`,
-            { modal: true },
-            'ok'
-        );
-        console.log({confirmation});
-        }
+    const reload = vscode.commands.registerCommand(`${this._viewId}/reload`, async (item: Item) => {
+      http.get('https://raw.githubusercontent.com/i-xiao-zi/php_demt_packages/refs/heads/main/index.json').then(res => {
+        console.log(res);
       });
-    return [ reload ];
+    });
+    const install = vscode.commands.registerCommand(`${this._viewId}/install`, async (item: Item) => {
+      if (item) {
+      const confirmation = await vscode.window.showWarningMessage(
+          `确定要删除 "${item.label}" 吗?`,
+          { modal: true },
+          'ok'
+      );
+      console.log({confirmation});
+      }
+    });
+    return [ reload, install ];
   }
 }
 

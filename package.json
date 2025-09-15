@@ -33,74 +33,104 @@
         "icon": "$(file)"
       },
       {
-        "command": "pde.startMainTreeProvider",
+        "command": "view:main/setting",
+        "title": "设置",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "view:main/start",
         "title": "启动",
         "icon": "$(debug-start)"
       },
       {
-        "command": "pde.stopMainTreeProvider",
+        "command": "view:main/stop",
         "title": "停止",
         "icon": "$(debug-stop)"
       },
       {
-        "command": "pde.restartMainTreeProvider",
+        "command": "view:main/restart",
         "title": "重启",
         "icon": "$(debug-restart)"
       },
       {
-        "command": "pde.startNginx",
-        "title": "启动",
-        "icon": "$(debug-start)"
-      },
-      {
-        "command": "pde.stopNginx",
-        "title": "停止",
-        "icon": "$(debug-stop)"
-      },
-      {
-        "command": "pde.restartNginx",
-        "title": "重启",
-        "icon": "$(debug-restart)"
-      },
-      {
-        "command": "pde.startMysql",
-        "title": "启动",
-        "icon": "$(debug-start)"
-      },
-      {
-        "command": "pde.stopMysql",
-        "title": "停止",
-        "icon": "$(debug-stop)"
-      },
-      {
-        "command": "pde.restartMysql",
-        "title": "重启",
-        "icon": "$(debug-restart)"
-      },
-      {
-        "command": "pde.switchPhpVersion",
+        "command": "view:main/switch_php_version",
         "title": "切换PHP版本",
         "icon": "$(arrow-swap)"
       },
       {
-        "command": "pde.newNginxConfigFile",
+        "command": "view:main/start_php",
+        "title": "启动",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "view:main/restart_php",
+        "title": "重启",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "view:main/stop_php",
+        "title": "停止",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "view:main/start_nginx",
+        "title": "启动",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "view:main/restart_nginx",
+        "title": "重启",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "view:main/stop_nginx",
+        "title": "停止",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "view:main/start_mysql",
+        "title": "启动",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "view:main/restart_mysql",
+        "title": "重启",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "view:main/stop_mysql",
+        "title": "停止",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "view:nginx/new_file",
         "title": "新建文件",
         "icon": "$(add)"
       },
       {
-        "command": "pde.delNginxConfigFile",
+        "command": "view:nginx/edit_file",
+        "title": "编辑文件",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "view:nginx/del_file",
         "title": "删除文件",
         "icon": "$(trash)"
       },
       {
-        "command": "view:extension/reload",
-        "title": "安装",
-        "icon": "$(install)"
+        "command": "view:php/edit_file",
+        "title": "编辑文件",
+        "icon": "$(edit)"
       },
       {
-        "command": "view:php/install",
+        "command": "view:extension/reload",
+        "title": "重载插件列表",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "view:extension/install",
         "title": "安装",
-        "icon": "$(install)"
+        "icon": "$(cloud-download)"
       }
     ],
     "menus": {
@@ -111,22 +141,27 @@
 					"group": "navigation@0"
 				},
 				{
-					"command": "pde.startMainTreeProvider",
+					"command": "view:main/setting",
+					"when": "view == view:main",
+					"group": "navigation@1"
+				},
+				{
+					"command": "view:main/start",
 					"when": "view == view:main",
 					"group": "navigation@2"
 				},
 				{
-					"command": "pde.stopMainTreeProvider",
+					"command": "view:main/restart",
 					"when": "view == view:main",
 					"group": "navigation@2"
 				},
 				{
-					"command": "pde.restartMainTreeProvider",
+					"command": "view:main/stop",
 					"when": "view == view:main",
 					"group": "navigation@2"
 				},
 				{
-					"command": "pde.newNginxConfigFile",
+					"command": "view:nginx/new_file",
 					"when": "view == view:nginx",
 					"group": "navigation@2"
 				},
@@ -143,53 +178,73 @@
           "group": "inline@-2"
         },
         {
-          "command": "pde.switchPhpVersion",
+          "command": "view:main/switch_php",
           "when": "view == view:main && viewItem == php",
           "group": "inline@-2"
         },
         {
-          "command": "pde.switchPhpVersion",
+          "command": "view:main/start_php",
           "when": "view == view:main && viewItem == php",
           "group": "inline@-2"
         },
         {
-          "command": "pde.startNginx",
+          "command": "view:main/restart_php",
+          "when": "view == view:main && viewItem == php",
+          "group": "inline@-2"
+        },
+        {
+          "command": "view:main/stop_php",
+          "when": "view == view:main && viewItem == php",
+          "group": "inline@-2"
+        },
+        {
+          "command": "view:main/start_nginx",
           "when": "view == view:main && viewItem == nginx",
           "group": "inline@1"
         },
         {
-          "command": "pde.restartNginx",
+          "command": "view:main/restart_nginx",
           "when": "view == view:main && viewItem == nginx",
           "group": "inline@2"
         },
         {
-          "command": "pde.stopNginx",
+          "command": "view:main/stop_nginx",
           "when": "view == view:main && viewItem == nginx",
           "group": "inline@3"
         },
         {
-          "command": "pde.startMysql",
+          "command": "view:main/start_mysql",
           "when": "view == view:main && viewItem == mysql",
-          "group": "inline@1"
+          "group": "inline@-2"
         },
         {
-          "command": "pde.restartMysql",
+          "command": "view:main/restart_mysql",
           "when": "view == view:main && viewItem == mysql",
-          "group": "inline@2"
+          "group": "inline@-2"
         },
         {
-          "command": "pde.stopMysql",
+          "command": "view:main/stop_mysql",
           "when": "view == view:main && viewItem == mysql",
-          "group": "inline@3"
+          "group": "inline@-2"
         },
         {
-          "command": "pde.delNginxConfigFile",
+          "command": "view:nginx/edit_file",
           "when": "view == view:nginx",
-          "group": "inline@-2"
+          "group": "inline@1"
         },
         {
-          "command": "view:php/install",
-          "when": "view == view:php && viewItem == phpItem",
+          "command": "view:nginx/del_file",
+          "when": "view == view:nginx",
+          "group": "inline@2"
+        },
+				{
+					"command": "view:php/edit_file",
+					"when": "view == view:php",
+					"group": "inline@2"
+				},
+        {
+          "command": "view:extension/install",
+          "when": "view == view:extension",
           "group": "inline@-2"
         }
       ]
@@ -211,6 +266,12 @@
         {
           "id": "view:php",
           "name": "PHP配置",
+          "type": "tree",
+          "icon": "images/lnmp.svg"
+        },
+        {
+          "id": "view:mysql",
+          "name": "MySQL配置",
           "type": "tree",
           "icon": "images/lnmp.svg"
         },

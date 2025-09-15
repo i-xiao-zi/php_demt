@@ -83,7 +83,7 @@ class NginxProvider implements vscode.TreeDataProvider<Item> {
       });
   }
   public registerCommands(): vscode.Disposable[] {
-    const newNginxConfigFile = vscode.commands.registerCommand('pde.newNginxConfigFile', async () => {
+    const new_file = vscode.commands.registerCommand(`${this._viewId}/new_file`, async () => {
         const name = await vscode.window.showInputBox({
           prompt: '请输入文件名',
           placeHolder: '请输入文件名',
@@ -125,7 +125,18 @@ class NginxProvider implements vscode.TreeDataProvider<Item> {
           await doc.show();
         }
     });
-    const delNginxConfigFile = vscode.commands.registerCommand('pde.delNginxConfigFile', async (item: Item) => {
+    const edit_file = vscode.commands.registerCommand(`${this._viewId}/edit_file`, async (item: Item) => {
+      console.log({item});
+      if (item) {
+        const doc = await vscode.workspace.openTextDocument(path.join(this._dir, item.label));
+        const editor = await vscode.window.showTextDocument(doc, {
+          viewColumn: vscode.ViewColumn.Active,
+          preserveFocus: true,
+          preview: false,
+        });
+      }
+    });
+    const del_file = vscode.commands.registerCommand(`${this._viewId}/del_file`, async (item: Item) => {
       console.log({item});
       if (item) {
         const confirmation = await vscode.window.showWarningMessage(
@@ -136,7 +147,7 @@ class NginxProvider implements vscode.TreeDataProvider<Item> {
         console.log({confirmation});
       }
     });
-    return [ newNginxConfigFile, delNginxConfigFile ];
+    return [ new_file, edit_file, del_file ];
   }
 }
 

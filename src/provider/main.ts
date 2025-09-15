@@ -3,6 +3,7 @@ import Item from '../Item';
 import { Node } from '../types';
 import datas from '../data';
 import fs from 'fs';
+import Panel from '../Panel';
 
 class MainProvider implements vscode.TreeDataProvider<Item> {
   private readonly _viewId: string = "view:main";
@@ -38,20 +39,14 @@ class MainProvider implements vscode.TreeDataProvider<Item> {
       }
   }
   rootNodes(): Item[] {
-    const php = new Item("php","PHP", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+    const php = new Item("php","PHP", vscode.TreeItemCollapsibleState.None, undefined, 'gear~spin')
       .setContextValue('php')
       .setCommand('切换PHP版本', 'pde.switchPhpVersion', [], '切换PHP版本');
-    const nginx = new Item("nginx","Nginx", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+    const nginx = new Item("nginx","Nginx", vscode.TreeItemCollapsibleState.None, undefined, 'loading~spin')
       .setContextValue('nginx');
-    const mysql = new Item("mysql","MySQL", vscode.TreeItemCollapsibleState.None, undefined, 'file')
+    const mysql = new Item("mysql","MySQL", vscode.TreeItemCollapsibleState.None, undefined, 'sync~spin')
       .setContextValue('mysql');
-    const redis = new Item("redis","Redis", vscode.TreeItemCollapsibleState.None, undefined, 'file')
-      .setContextValue('redis');
-    const kafka = new Item("kafka","Kafka", vscode.TreeItemCollapsibleState.None, undefined, 'file')
-      .setContextValue('kafka');
-    const zookeeper = new Item("zookeeper","Zookeeper", vscode.TreeItemCollapsibleState.None, undefined, 'file')
-      .setContextValue('zookeeper');
-    return [ php, nginx, mysql, redis, kafka, zookeeper ];
+    return [ php, nginx, mysql ];
   }
 
   // 辅助方法：根据ID查找节点
@@ -75,19 +70,63 @@ class MainProvider implements vscode.TreeDataProvider<Item> {
       });
   }
   public registerCommands(): vscode.Disposable[] {
-    const switchPhpVersion = vscode.commands.registerCommand('pde.switchPhpVersion', async () => {
-      const phpVersion = await vscode.window.showQuickPick([
-        {
-          label: '7.4',
-          description: 'PHP 7.4',
-        },
-        {
-          label: '8.0',
-          description: 'PHP 8.0',
-        },
-      ]);
+    const setting = vscode.commands.registerCommand(`${this._viewId}/setting`, () => {
+      const settingPanel = new Panel(this._context.extensionUri ,Panel.metas.SETTING);
+      settingPanel.render();
+      this._context.subscriptions.push({
+        dispose: () => {
+          if (settingPanel) {
+            settingPanel.dispose();
+          }
+        }
+      });
     });
-    return [ switchPhpVersion ];
+    const start = vscode.commands.registerCommand(`${this._viewId}/start`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/start`);
+    });
+    const restart = vscode.commands.registerCommand(`${this._viewId}/restart`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/restart`);
+    });
+    const stop = vscode.commands.registerCommand(`${this._viewId}/stop`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/stop`);
+    });
+    const switch_php = vscode.commands.registerCommand(`${this._viewId}/switch_php`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/switch_php`);
+    });
+    const start_php = vscode.commands.registerCommand(`${this._viewId}/start_php`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/start_php`);
+    });
+    const restart_php = vscode.commands.registerCommand(`${this._viewId}/restart_php`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/restart_php`);
+    });
+    const stop_php = vscode.commands.registerCommand(`${this._viewId}/stop_php`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/restart_php`);
+    });
+    const start_nginx = vscode.commands.registerCommand(`${this._viewId}/start_nginx`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/start_nginx`);
+    });
+    const restart_nginx = vscode.commands.registerCommand(`${this._viewId}/restart_nginx`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/restart_nginx`);
+    });
+    const stop_nginx = vscode.commands.registerCommand(`${this._viewId}/stop_nginx`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/stop_nginx`);
+    });
+    const start_mysql = vscode.commands.registerCommand(`${this._viewId}/start_mysql`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/start_mysql`);
+    });
+    const restart_mysql = vscode.commands.registerCommand(`${this._viewId}/restart_mysql`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/restart_mysql`);
+    });
+    const stop_mysql = vscode.commands.registerCommand(`${this._viewId}/stop_mysql`, () => {
+      vscode.window.showInformationMessage(`${this._viewId}/stop_mysql`);
+    });
+    return [ 
+      setting,
+      start, restart, stop, 
+      switch_php, start_php, restart_php, stop_php, 
+      start_nginx, restart_nginx, stop_nginx, 
+      start_mysql, restart_mysql, stop_mysql 
+    ];
   }
 }
 

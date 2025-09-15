@@ -15,9 +15,13 @@ class Panel extends Webview {
             enableScripts: true,
             localResourceRoots: [vscode.Uri.joinPath(vscode.Uri.file(__dirname), '..', 'dist', 'webview')]
         });
+        panel.iconPath = vscode.Uri.parse("$(gear)");
         this._panel = panel;
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
         this._panel.webview.html = this._getHtml(this._panel.webview);
+    }
+    public panel(): vscode.WebviewPanel {
+        return this._panel;
     }
     
     public render() {

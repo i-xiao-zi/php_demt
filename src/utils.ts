@@ -1,6 +1,6 @@
 import fs from "fs";
-import http from "http";
-import https from "https";
+import * as Http from "http";
+import * as Https from "https";
 
 
 export const mkdir = (dir: fs.PathLike) => {
@@ -18,7 +18,7 @@ export const mkdir = (dir: fs.PathLike) => {
 
 export const download = async (uri: string, dest: fs.PathLike): Promise<void> => {
   const url = new URL(uri);
-  const transport = url.protocol === "https" ? https : http;
+  const transport = url.protocol === "https:" ? Https : Http;
   const request = transport.get(url, (response) => {
     if (response.statusCode !== 200) {
         return Promise.reject(new Error(`请求失败，状态码: ${response.statusCode}`));
@@ -40,4 +40,18 @@ export const download = async (uri: string, dest: fs.PathLike): Promise<void> =>
   return new Promise((resolve, reject) => {
     request.end();
   });
+};
+
+export const http = {
+  get: (uri: string) => {
+    return new Promise((resolve, reject) => {
+      const url = new URL(uri);
+      const transport = url.protocol === "https:" ? Https : Http;
+      transport.get(url, (res) => {
+        resolve(res);
+      }).on('error', (err) => {
+        reject(err);
+      });
+    });
+  }
 };

@@ -5,26 +5,11 @@ import MainProvider from './provider/main';
 import NginxProvider from './provider/nginx';
 import PhpProvider from './provider/php';
 import ExtensionProvider from './provider/extension';
+import MysqlProvider from './provider/mysql';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "pde" is now active!');
 	
-	// 存储SettingPanel实例
-	const disposable = vscode.commands.registerCommand('pde.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from pde!');
-		// 创建SettingPanel实例并传递'setting'参数
-		const settingPanel = new Panel(context.extensionUri ,Panel.metas.SETTING);
-		// 调用实例的render方法
-		settingPanel.render();
-		// 将dispose方法添加到context.subscriptions，确保在扩展停用时正确清理资源
-		context.subscriptions.push({
-			dispose: () => {
-				if (settingPanel) {
-					settingPanel.dispose();
-				}
-			}
-		});
-	});
 	const editFile = vscode.commands.registerCommand('pde.editFile', async (...args: string[]) => {
 		vscode.window.showInformationMessage('Hello World from pde.editFile!');
 		console.log({args});
@@ -47,17 +32,21 @@ export function activate(context: vscode.ExtensionContext) {
 	const php_provider = new PhpProvider(context);
 	const php_view = php_provider.createView();
 	const php_disposables = php_provider.registerCommands();
+	// php config view
+	const mysql_provider = new MysqlProvider(context);
+	const mysql_view = mysql_provider.createView();
+	const mysql_disposables = mysql_provider.registerCommands();
 	// extension view
 	const extension_provider = new ExtensionProvider(context);
 	const extension_view = extension_provider.createView();
 	const extension_disposables = extension_provider.registerCommands();
 
 	context.subscriptions.push(
-		disposable, 
 		editFile,
 		main_view, ...main_disposables, 
 		nginx_view, ...nginx_disposables,
 		php_view, ...php_disposables,
+		mysql_view, ...mysql_disposables,
 		extension_view, ...extension_disposables
 	);
 }
